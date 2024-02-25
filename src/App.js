@@ -6,6 +6,7 @@ import NotesList from "./NotesList.js";
  * Rendering logic to presentation components for this application
  */
 class App extends Component {
+  // Initial state with a default note and an empty search text
   state = {
     notes: [
       {
@@ -18,6 +19,7 @@ class App extends Component {
     searchText: "",
   };
 
+  // Function to add a new note to the state
   addNote = () => {
     const newNote = {
       id: Date.now(),
@@ -29,10 +31,8 @@ class App extends Component {
     this.setState({ notes: newNotes });
   };
 
+  // Function to handle typing in the title or description of a note
   onType = (editMeId, updatedKey, updatedValue) => {
-    // editMeId == id of the note that is edited
-    // updatedKey == title or description field
-    // updatedValue == value of title or description
     const updatedNotes = this.state.notes.map((note) => {
       if (note.id !== editMeId) {
         return note;
@@ -49,11 +49,8 @@ class App extends Component {
     this.setState({ notes: updatedNotes });
   };
 
+  // Function to handle searching for notes
   onSearch = (text) => {
-    /* toggle the doesMatchSearch boolean value of each sticky
-    note when the user types in the search field.
-    set the doesMatchSearch value to true for a sticky note if
-    it's title or description matches the search string. */
     const newSearchText = text.toLowerCase();
     const updatedNotes = this.state.notes.map((note) => {
       if (!newSearchText) {
@@ -84,16 +81,15 @@ class App extends Component {
     this.setState({ notes: updatedNotes });
   };
 
+  // Lifecycle method: Save notes data to local storage after each render
   componentDidUpdate() {
     /* after each render, save notes data to local storage */
     const stringifiedNotes = JSON.stringify(this.state.notes);
     localStorage.setItem("savedNotes", stringifiedNotes);
   }
 
+  // Lifecycle method: Read saved notes data from local storage after first render
   componentDidMount() {
-    /* after rendering for the first time, read saved
-    notes data from local storage and pass that data
-    to component state if it exists */
     const stringifiedNotes = localStorage.getItem("savedNotes");
     if (stringifiedNotes) {
       const savedNotes = JSON.parse(stringifiedNotes);
@@ -101,6 +97,7 @@ class App extends Component {
     }
   }
 
+  // Render method: Output the Header and NotesList components
   render() {
     return (
       <div>
@@ -119,4 +116,5 @@ class App extends Component {
   }
 }
 
+// Exporting the App component as the default export
 export default App;
